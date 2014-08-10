@@ -1,0 +1,481 @@
+Linux必学的60个命令(1)-安装与登陆
+Linux必学的60个命令
+
+Linux提供了大量的命令，利用它可以有效地完成大量的工作，如磁盘操作、文件存取、目
+录操作、进程管理、文件权限设定等。所以，在Linux系统上工作离不开使用系统提供的命
+令。要想真正理解Linux系统，就必须从Linux命令学起，通过基础的命令学习可以进一步理
+解Linux系统。
+
+不同Linux发行版的命令数量不一样，但Linux发行版本最少的命令也有200多个。这里笔者
+把比较重要和使用频率最多的命令，按照它们在系统中的作用分成下面六个部分一一介绍。
+
+◆ 安装和登录命令：login、shutdown、halt、reboot、install、mount、umount、chsh、
+exit、last；
+
+◆ 文件处理命令：file、mkdir、grep、dd、find、mv、ls、diff、cat、ln；
+
+◆ 系统管理相关命令：df、top、free、quota、at、lp、adduser、groupadd、kill、
+crontab；
+
+◆ 网络操作命令：ifconfig、ip、ping、netstat、telnet、ftp、route、rlogin、rcp、
+finger、mail、 nslookup；
+
+◆ 系统安全相关命令：passwd、su、umask、chgrp、chmod、chown、chattr、sudo ps、
+who；
+
+◆ 其它命令：tar、unzip、gunzip、unarj、mtools、man、unendcode、uudecode。
+
+本文以Mandrake Linux 9.1(Kenrel 2.4.21)为例，介绍Linux下的安装和登录命令。
+
+login
+
+1.作用
+
+login的作用是登录系统，它的使用权限是所有用户。
+
+2.格式
+
+login [name][－p ][－h 主机名称]
+
+
+3.主要参数
+
+－p:通知login保持现在的环境参数。
+
+－h:用来向远程登录的之间传输用户名。
+
+如果选择用命令行模式登录Linux的话，那么看到的第一个Linux命令就是login：。
+
+一般界面是这样的：
+
+Manddrake Linux release 9.1(Bamboo) for i586
+kennel 2.4.21－0.13mdk on i686 / tty1
+localhost login:root
+password:
+
+
+上面代码中，第一行是Linux发行版本号，第二行是内核版本号和登录的虚拟控制台，我们
+在第三行输入登录名，按“Enter”键在Password后输入账户密码，即可登录系统。出于安
+全考虑，输入账户密码时字符不会在屏幕上回显，光标也不移动。
+
+登录后会看到下面这个界面（以超级用户为例）：
+
+[root@localhost root]#
+last login:Tue ,Nov 18 10:00:55 on vc/1
+
+
+上面显示的是登录星期、月、日、时间和使用的虚拟控制台。
+
+4.应用技巧
+
+Linux是一个真正的多用户操作系统，可以同时接受多个用户登录，还允许一个用户进行多
+次登录。这是因为Linux和许多版本的Unix一样，提供了虚拟控制台的访问方式，允许用户
+在同一时间从控制台（系统的控制台是与系统直接相连的监视器和键盘）进行多次登录。每
+个虚拟控制台可以看作是一个独立的工作站，工作台之间可以切换。虚拟控制台的切换可以
+通过按下Alt键和一个功能键来实现，通常使用F1-F6 。
+
+例如，用户登录后，按一下“Alt+F2”键，用户就可以看到上面出现的“login:”提示符，
+说明用户看到了第二个虚拟控制台。然后只需按“Alt+ F1”键，就可以回到第一个虚拟控
+制台。一个新安装的Linux系统允许用户使用“Alt+F1”到“Alt+F6”键来访问前六个虚拟
+控制台。虚拟控制台最有用的是，当一个程序出错造成系统死锁时，可以切换到其它虚拟控
+制台工作，关闭这个程序。
+
+shutdown
+
+1.作用
+
+shutdown命令的作用是关闭计算机，它的使用权限是超级用户。
+
+2.格式
+
+shutdown [－h][－i][－k][－m][－t]
+
+
+3.重要参数
+
+－t：在改变到其它运行级别之前，告诉init程序多久以后关机。
+
+－k：并不真正关机，只是送警告信号给每位登录者。
+
+－h：关机后关闭电源。
+
+－c：cancel current process取消目前正在执行的关机程序。所以这个选项当然没有时间
+参数，但是可以输入一个用来解释的讯息，而这信息将会送到每位使用者。
+
+－F：在重启计算机时强迫fsck。
+
+－time：设定关机前的时间。
+
+－m: 将系统改为单用户模式。
+
+－i：关机时显示系统信息。
+
+4.命令说明
+
+shutdown命令可以安全地将系统关机。有些用户会使用直接断掉电源的方式来关闭Linux系
+统，这是十分危险的。因为Linux与Windows不同，其后台运行着许多进程，所以强制关机可
+能会导致进程的数据丢失，使系统处于不稳定的状态，甚至在有的系统中会损坏硬件设备（
+硬盘）。在系统关机前使用 shutdown命令，系统管理员会通知所有登录的用户系统将要关
+闭，并且login指令会被冻结，即新的用户不能再登录。
+
+5.举例
+
+  shutdown -h 3:40
+  说明 3：40开始关机。
+
+halt
+
+1.作用
+
+halt命令的作用是关闭系统，它的使用权限是超级用户。
+
+2.格式
+
+halt [－n] [－w] [－d] [－f] [－i] [－p]
+
+
+3.主要参数说明
+
+－n：防止sync系统调用，它用在用fsck修补根分区之后，以阻止内核用老版本的超级块覆
+盖修补过的超级块。
+
+－w：并不是真正的重启或关机,只是写wtmp（/var/log/wtmp）纪录。
+
+－f：没有调用shutdown，而强制关机或重启。
+
+－i：关机（或重启）前，关掉所有的网络接口。
+
+－f：强迫关机，不呼叫shutdown这个指令。
+
+－p: 当关机的时候顺便做关闭电源的动作。
+
+－d：关闭系统，但不留下纪录。　
+
+4.命令说明
+
+halt就是调用shutdown －h。halt执行时，杀死应用进程，执行sync(将存于buffer中的资
+料强制写入硬盘中)系统调用，文件系统写操作完成后就会停止内核。若系统的运行级别为
+0或6，则关闭系统；否则以shutdown指令（加上－h参数）来取代。　
+
+reboot
+
+1.作用
+
+reboot命令的作用是重新启动计算机，它的使用权限是系统管理者。
+
+2.格式
+
+reboot [－n] [－w] [－d] [－f] [－i]
+
+
+3.主要参数
+
+－n: 在重开机前不做将记忆体资料写回硬盘的动作。
+
+－w: 并不会真的重开机，只是把记录写到/var/log/wtmp文件里。
+
+－d: 不把记录写到/var/log/wtmp文件里（－n这个参数包含了－d）。
+
+－i: 在重开机之前先把所有与网络相关的装置停止。
+
+install
+
+1.作用
+
+install命令的作用是安装或升级软件或备份数据，它的使用权限是所有用户。
+
+2.格式
+
+(1)install [选项]... 来源 目的地
+
+(2)install [选项]... 来源... 目录
+
+(3)install －d [选项]... 目录...
+
+在前两种格式中，会将<来源>复制至<目的地>或将多个<来源>文件复制至已存在的<目录>，
+同时设定权限模式及所有者/所属组。在第三种格式中，会创建所有指定的目录及它们的主
+目录。长选项必须用的参数在使用短选项时也是必须的。
+
+3.主要参数
+
+－－backup[=CONTROL]：为每个已存在的目的地文件进行备份。
+
+－b：类似 －－backup，但不接受任何参数。
+
+－c：(此选项不作处理)。
+
+－d，－－directory：所有参数都作为目录处理，而且会创建指定目录的所有主目录。
+
+－D：创建<目的地>前的所有主目录，然后将<来源>复制至 <目的地>；在第一种使用格式中
+有用。
+
+－g，－－group=组：自行设定所属组，而不是进程目前的所属组。
+
+－m，－－mode=模式：自行设定权限模式 (像chmod)，而不是rwxr－xr－x。
+
+－o，－－owner=所有者：自行设定所有者 (只适用于超级用户)。
+
+－p，－－preserve－timestamps：以<来源>文件的访问/修改时间作为相应的目的地文件的
+时间属性。
+
+－s，－－strip：用strip命令删除symbol table，只适用于第一及第二种使用格式。
+
+－S，－－suffix=后缀：自行指定备份文件的<后缀>。
+
+－v，－－verbose：处理每个文件/目录时印出名称。
+
+－－help：显示此帮助信息并离开。
+
+－－version：显示版本信息并离开。
+
+mount
+
+1.作用
+
+mount命令的作用是加载文件系统，它的用权限是超级用户或/etc/fstab中允许的使用者。
+
+2.格式
+
+mount －a [－fv] [－t vfstype] [－n] [－rw] [－F] device dir
+
+
+3.主要参数
+
+－h：显示辅助信息。
+
+－v：显示信息，通常和－f用来除错。
+
+－a：将/etc/fstab中定义的所有文件系统挂上。
+
+－F：这个命令通常和－a一起使用，它会为每一个mount的动作产生一个行程负责执行。在
+系统需要挂上大量NFS文件系统时可以加快加载的速度。
+
+－f：通常用于除错。它会使mount不执行实际挂上的动作，而是模拟整个挂上的过程，通常
+会和－v一起使用。
+
+－t vfstype：显示被加载文件系统的类型。
+
+－n：一般而言，mount挂上后会在/etc/mtab中写入一笔资料，在系统中没有可写入文件系
+统的情况下，可以用这个选项取消这个动作。
+
+4.应用技巧
+
+在Linux和Unix系统上，所有文件都是作为一个大型树（以/为根）的一部分访问的。要访问
+CD-ROM上的文件，需要将CD-ROM设备挂装在文件树中的某个挂装点。如果发行版安装了自动
+挂装包，那么这个步骤可自动进行。在Linux中，如果要使用硬盘、光驱等储存设备，就得
+先将它加载，当储存设备挂上了之后，就可以把它当成一个目录来访问。挂上一个设备使用
+mount命令。在使用mount这个指令时，至少要先知道下列三种信息：要加载对象的文件系统
+类型、要加载对象的设备名称及要将设备加载到哪个目录下。
+
+（1）Linux可以识别的文件系统
+
+◆ Windows 95/98常用的FAT 32文件系统：vfat ；
+
+◆ Win NT/2000 的文件系统：ntfs ；
+
+◆ OS/2用的文件系统：hpfs；
+
+◆ Linux用的文件系统：ext2、ext3；
+
+◆ CD-ROM光盘用的文件系统：iso9660。
+
+虽然vfat是指FAT 32系统，但事实上它也兼容FAT 16的文件系统类型。
+
+（2）确定设备的名称
+
+在Linux中，设备名称通常都存在/dev里。这些设备名称的命名都是有规则的，可以用“推
+理”的方式把设备名称找出来。例如，/dev/hda1这个 IDE设备，hd是Hard Disk(硬盘)的，
+sd是SCSI Device，fd是Floppy Device(或是Floppy Disk?)。a代表第一个设备，通常IDE接
+口可以接上4个IDE设备(比如4块硬盘)。所以要识别IDE硬盘的方法分别就是hda、hdb、hdc
+、 hdd。hda1中的“1”代表hda的第一个硬盘分区 (partition)，hda2代表hda的第二主分
+区，第一个逻辑分区从hda5开始，依此类推。此外，可以直接检查/var/log/messages文件
+，在该文件中可以找到计算机开机后系统已辨认出来的设备代号。
+
+（3）查找挂接点
+
+在决定将设备挂接之前，先要查看一下计算机是不是有个/mnt的空目录，该目录就是专门用
+来当作挂载点(Mount Point)的目录。建议在/mnt里建几个/mnt/cdrom、/mnt/floppy、
+/mnt/mo等目录，当作目录的专用挂载点。举例而言，如要挂载下列5个设备，其执行指令可
+能如下 (假设都是Linux的ext2系统，如果是Windows XX请将ext2改成vfat)：
+
+软盘 ===>mount －t ext2 /dev/fd0 /mnt/floppy
+cdrom ===>mount －t iso9660 /dev/hdc /mnt/cdrom
+SCSI cdrom ===>mount －t iso9660 /dev/sdb /mnt/scdrom
+SCSI cdr ===>mount －t iso9660 /dev/sdc /mnt/scdr
+
+
+不过目前大多数较新的Linux发行版本（包括红旗 Linux、中软Linux、Mandrake Linux等）
+都可以自动挂装文件系统，但Red Hat Linux除外。
+
+umount
+
+1.作用
+
+umount命令的作用是卸载一个文件系统，它的使用权限是超级用户或/etc/fstab中允许的使
+用者。
+
+2.格式
+
+umount －a [－fFnrsvw] [－t vfstype] [－n] [－rw] [－F] device dir
+
+
+3.使用说明
+
+umount命令是mount命令的逆操作，它的参数和使用方法和mount命令是一样的。Linux挂装
+CD-ROM后，会锁定CD—ROM，这样就不能用CD-ROM面板上的Eject按钮弹出它。但是，当不再
+需要光盘时，如果已将/cdrom作为符号链接，请使用umount/cdrom来卸装它。仅当无用户正
+在使用光盘时，该命令才会成功。该命令包括了将带有当前工作目录当作该光盘中的目录的
+终端窗口。
+
+chsh
+
+1.作用
+
+chsh命令的作用是更改使用者shell设定，它的使用权限是所有使用者。
+
+2.格式
+
+chsh [ －s ] [ －list] [ －－help ] [ －v ] [ username ]
+
+
+3.主要参数
+
+－l：显示系统所有Shell类型。
+
+－v：显示Shell版本号。
+
+4.应用技巧
+
+前面介绍了Linux下有多种Shell，一般缺省的是Bash，如果想更换Shell类型可以使用chsh
+命令。先输入账户密码，然后输入新Shell类型，如果操作正确系统会显示“Shell change
+”。其界面一般如下：
+
+Changing fihanging shell for cao
+Password:
+New shell [/bin/bash]: /bin/tcsh
+
+
+上面代码中，[ ]内是目前使用的Shell。普通用户只能修改自己的Shell，超级用户可以修
+改全体用户的Shell。要想查询系统提供哪些Shell，可以使用chsh -l 命令，见图1所示。
+
+
+
+图1 系统可以使用的Shell类型
+
+
+
+从图1中可以看到，笔者系统中可以使用的Shell有bash（缺省）、csh、sh、tcsh四种。
+
+exit
+
+1.作用
+
+exit命令的作用是退出系统，它的使用权限是所有用户。
+
+2.格式
+
+exit
+
+3.参数
+
+exit命令没有参数，运行后退出系统进入登录界面。
+
+last
+
+1.作用
+
+last命令的作用是显示近期用户或终端的登录情况，它的使用权限是所有用户。通过last命
+令查看该程序的log，管理员可以获知谁曾经或企图连接系统。
+
+2.格式
+
+1ast[—n][－f file][－t tty] [—h 节点][－I —IP][—1][－y][1D]
+
+
+3.主要参数
+
+－n：指定输出记录的条数。
+
+－f file：指定用文件file作为查询用的log文件。
+
+－t tty：只显示指定的虚拟控制台上登录情况。
+
+－h 节点：只显示指定的节点上的登录情况。
+
+－i IP：只显示指定的IP上登录的情况。
+
+－1：用IP来显示远端地址。
+
+－y：显示记录的年、月、日。
+
+－ID：知道查询的用户名。
+
+－x:显示系统关闭、用户登录和退出的历史。
+
+动手练习
+
+上面介绍了Linux安装和登录命令，下面介绍几个实例，动手练习一下刚才讲过的命令。
+
+1.一次运行多个命令
+
+在一个命令行中可以执行多个命令，用分号将各个命令隔开即可，例如：
+
+#last －x；halt
+
+
+上面代码表示在显示系统关闭、用户登录和退出的历史后关闭计算机。
+
+2.利用mount挂装文件系统访问Windows系统
+
+许多Linux发行版本现在都可以自动加载Vfat分区来访问Windows系统，而Red Hat各个版本
+都没有自动加载Vfat分区，因此还需要进行手工操作。
+
+mount可以将Windows分区作为Linux的一个“文件”挂接到Linux的一个空文件夹下，从而将
+Windows的分区和/mnt这个目录联系起来。因此，只要访问这个文件夹就相当于访问该分区
+了。首先要在/mnt下建立winc文件夹，在命令提示符下输入下面命令：
+
+#mount -t vfat /dev/hda1 /mnt/winc
+
+
+即表示将Windows的C分区挂到Liunx的/mnt/winc目录下。这时，在/mnt/winc目录下就可以
+看到Windows中C盘的内容了。使用类似的方法可以访问Windows系统的D、E盘。在Linux系统
+显示Windows的分区一般顺序这样的：hda1为C盘、hda5为D盘、 hda6为E盘……以此类推。
+上述方法可以查看Windows系统有一个很大的问题，就是Windows中的所有中文文件名或文件
+夹名全部显示为问号 “？”，而英文却可以正常显示。我们可以通过加入一些参数让它显
+示中文。还以上面的操作为例，此时输入命令：
+
+#mount -t vfat -o iocharset=cp936 /dev/hda1 /mnt/winc
+
+
+现在它就可以正常显示中文了。
+
+3.使用mount加挂闪盘上的文件系统
+
+在Linux下使用闪盘非常简单。Linux对USB设备有很好的支持，当插入闪盘后，闪盘被识别
+为一个SCSI盘，通常输入以下命令：
+
+# mount /dev/sda1 /usb
+
+
+就能够加挂闪盘上的文件系统。
+
+小知识
+
+Linux命令与Shell
+
+所谓Shell，就是命令解释程序，它提供了程序设计接口，可以使用程序来编程。学习
+Shell对于Linux初学者理解Linux系统是非常重要的。 Linux系统的Shell作为操作系统的外
+壳，为用户提供了使用操作系统的接口。Shell是命令语言、命令解释程序及程序设计语言
+的统称，是用户和 Linux内核之间的接口程序。如果把Linux内核想象成一个球体的中心，
+Shell就是围绕内核的外层。当从Shell或其它程序向Linux传递命令时，内核会做出相应的
+反应。Shell在Linux系统的作用和MS DOS下的COMMAND.COM和Windows 95/98 的
+explorer.exe相似。Shell虽然不是系统核心的一部分，只是系统核心的一个外延，但它能
+够调用系统内核的大部分功能。因此，可以说 Shell是Unux/Linux最重要的实用程序。
+
+Linux中的Shell有多种类型，其中最常用的是Bourne Shell(sh)、C Shell(csh)和Korn
+Shell(ksh)。大多数Linux发行版本缺省的Shell是Bourne Again Shell，它是Bourne
+Shell的扩展，简称bash，与Bourne Shell完全向后兼容，并且在Bourne Shell的基础上增
+加了很多特性。bash放在/bin/bash中，可以提供如命令补全、命令编辑和命令历史表等功
+能。它还包含了很多C Shell和Korn Shell中的优点，有灵活和强大的编程接口，同时又有
+很友好的用户界面。Linux系统中200多个命令中有40个是bash的内部命令，主要包括 exit
+、less、lp、kill、 cd、pwd、fc、fg等。
